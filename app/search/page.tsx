@@ -1,7 +1,7 @@
 import { Header } from "@/components/header";
-import { SearchBar } from "@/components/search-bar";
 import { PublicationList } from "@/components/publication-list";
 import { prisma } from "@/lib/prisma";
+import { FilterDialog } from "@/components/filter-dialog";
 
 type SearchParams = Promise<{ q: string; category: string }>;
 
@@ -22,6 +22,7 @@ export default async function Search({
           author: true,
         },
       },
+      images: true,
     },
     where: {
       AND: [{ title: { contains: q } }, { content: { contains: q } }],
@@ -32,7 +33,8 @@ export default async function Search({
       <Header />
       <main className="container mx-auto px-6 py-8">
         <h1 className="mb-6 font-bold text-3xl">Buscar Publicaciones</h1>
-        <SearchBar />
+        <FilterDialog />
+
         <PublicationList posts={posts} />
       </main>
     </div>

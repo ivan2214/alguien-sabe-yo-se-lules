@@ -6,7 +6,7 @@ export default function Publish() {
     <div className="min-h-screen bg-gray-100">
       <Header />
       <main className="container mx-auto px-6 py-8">
-        <h1 className="text-3xl font-bold mb-6">Crear Nueva Publicación</h1>
+        <h1 className="mb-6 font-bold text-3xl">Crear Nueva Publicación</h1>
         <PublicationForm />
       </main>
     </div>

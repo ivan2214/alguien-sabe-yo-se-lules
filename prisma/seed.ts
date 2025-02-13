@@ -36,6 +36,20 @@ async function main() {
     )
   );
 
+  // Agregar entre 1 y 30 imágenes por cada post
+  await Promise.all(
+    posts.flatMap((post) =>
+      Array.from({ length: faker.number.int({ min: 1, max: 30 }) }).map(() =>
+        prisma.image.create({
+          data: {
+            url: faker.image.url(),
+            postId: post.id,
+          },
+        })
+      )
+    )
+  );
+
   // Crear comentarios
   await Promise.all(
     posts.flatMap((post) =>

@@ -11,7 +11,7 @@ import type { CommentWithRelations } from "@/types";
 
 interface CommentsProps {
   postId: string;
-  comments: CommentWithRelations[];
+  comments: CommentWithRelations[] | null;
 }
 
 export function Comments({ postId, comments }: CommentsProps) {
@@ -50,17 +50,7 @@ export function Comments({ postId, comments }: CommentsProps) {
   return (
     <div className="space-y-4">
       <h3 className="font-semibold text-lg">Comentarios</h3>
-      <form onSubmit={handleSubmit} className="space-y-2">
-        <Textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Escriba su comentario..."
-          required
-        />
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Enviando..." : "Comentar"}
-        </Button>
-      </form>
+
       {comments && (
         <div className="space-y-4">
           {comments?.map((comment) => (
@@ -84,6 +74,20 @@ export function Comments({ postId, comments }: CommentsProps) {
           ))}
         </div>
       )}
+      <form
+        onSubmit={handleSubmit}
+        className="flex items-center justify-between gap-2"
+      >
+        <Textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="Escriba su comentario..."
+          required
+        />
+        <Button type="submit" disabled={isLoading} size="sm">
+          {isLoading ? "Enviando..." : "Comentar"}
+        </Button>
+      </form>
     </div>
   );
 }
