@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { CldUploadWidget } from "next-cloudinary";
-import Image from "next/image";
 import { useCallback } from "react";
 
 import { PictureInPicture } from "lucide-react";
@@ -47,13 +46,12 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       <div className="mb-4 flex flex-wrap gap-4">
         {value.map((url, index) => (
           <div key={url} className="relative h-[100px] w-[100px]">
-            <Image
-              fill
-              style={{ objectFit: "cover" }}
+            <img
               src={url || "/placeholder.svg"}
               alt="Upload"
-              className="rounded-md"
+              className="aspect-square h-full w-full rounded-md object-cover object-center"
             />
+            rounded-md
             <button
               onClick={() => handleRemove(index)}
               className="absolute top-0 right-0 rounded-full bg-red-500 p-1 text-white"

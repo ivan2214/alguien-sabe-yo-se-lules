@@ -50,8 +50,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
                     src={image.url || "/placeholder.svg"}
                     alt={`Post image ${index + 1}`}
                     layout="fill"
-                    objectFit="cover"
-                    className="rounded-lg"
+                    className="rounded-lg object-cover object-center"
                   />
                 </div>
               ))}
