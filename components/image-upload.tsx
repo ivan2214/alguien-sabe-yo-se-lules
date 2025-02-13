@@ -1,14 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useCallback } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
+import { useCallback } from "react";
 
-import type React from "react"; // Added import for React
 import { PictureInPicture } from "lucide-react";
+import type React from "react"; // Added import for React
 
 declare global {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   var cloudinary: any;
 }
 
@@ -24,6 +25,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   maxImages = 3,
 }) => {
   const handleUpload = useCallback(
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     (result: any) => {
       if (value.length >= maxImages) {
         return;

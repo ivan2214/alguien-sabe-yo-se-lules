@@ -1,4 +1,3 @@
-import { Header } from "@/components/header";
 import { PostDetail } from "@/components/post-detail";
 import { prisma } from "@/lib/prisma";
 
@@ -16,12 +15,24 @@ export default async function PostPage({ params }: { params: Params }) {
       comments: {
         include: {
           author: true,
+          reactions: {
+            include: {
+              post: true, // Asegúrate de incluir la relación con el post
+              comment: true, // Asegúrate de incluir la relación con el comentario
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",
         },
       },
       images: true,
+      reactions: {
+        include: {
+          comment: true,
+          post: true,
+        },
+      },
     },
   });
 

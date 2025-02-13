@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TypeReaction } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
@@ -51,7 +51,7 @@ async function main() {
   );
 
   // Crear comentarios
-  await Promise.all(
+  const comments = await Promise.all(
     posts.flatMap((post) =>
       users.map((user) =>
         prisma.comment.create({
@@ -78,6 +78,66 @@ async function main() {
           },
         })
       )
+    )
+  );
+
+  // Crear reacciones en posts y contar
+  await Promise.all(
+    posts.flatMap((post) =>
+      users.map(async () => {
+        const reaction = await prisma.reaction.create({
+          data: {
+            postId: post.id,
+            commentId: null,
+            type: faker.helpers.arrayElement([
+              TypeReaction.like,
+              TypeReaction.love,
+              TypeReaction.haha,
+              TypeReaction.angry,
+            ]),
+          },
+        });
+
+        // Actualizar el count de reacciones en el post
+        await prisma.post.update({
+          where: { id: post.id },
+          data: {
+            reactionCount: {
+              increment: 1,
+            },
+          },
+        });
+      })
+    )
+  );
+
+  // Crear reacciones en comentarios y contar
+  await Promise.all(
+    comments.flatMap((comment) =>
+      users.map(async () => {
+        const reaction = await prisma.reaction.create({
+          data: {
+            postId: null,
+            commentId: comment.id,
+            type: faker.helpers.arrayElement([
+              TypeReaction.like,
+              TypeReaction.love,
+              TypeReaction.haha,
+              TypeReaction.angry,
+            ]),
+          },
+        });
+
+        // Actualizar el count de reacciones en el comentario
+        await prisma.comment.update({
+          where: { id: comment.id },
+          data: {
+            reactionCount: {
+              increment: 1,
+            },
+          },
+        });
+      })
     )
   );
 

@@ -1,66 +1,120 @@
-"use client";
-
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Comments } from "./comments";
-import { ReportDialog } from "./report-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { PostWithRelations } from "@/types";
+import { Flag } from "lucide-react";
+import Image from "next/image";
+import type React from "react";
+import { ReactionButton } from "./reaction-button";
 
 interface PostDetailProps {
   post: PostWithRelations;
 }
 
-export function PostDetail({ post }: PostDetailProps) {
+export const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
+  const { title, content, author, category, images, reactions, comments } =
+    post;
+
   return (
-    <Card>
-      <CardHeader className="p-4">
-        <div className="flex items-center space-x-4">
-          <Avatar>
-            <AvatarImage src={post.author?.imageUrl || ""} />
-            <AvatarFallback>{post.author?.name?.[0]}</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="font-semibold">
-              {post.isAnonymous ? "Anónimo" : post.author?.name}
-            </p>
-            <p className="text-muted-foreground text-sm">
-              {new Date(post.createdAt).toLocaleDateString()}
-            </p>
+    <div className="mx-auto max-w-4xl overflow-hidden rounded-lg bg-white shadow-lg">
+      <div className="p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Avatar>
+              <AvatarImage
+                src={author?.imageUrl || "/placeholder.svg"}
+                alt={author?.name || "User"}
+              />
+              <AvatarFallback>{author?.name?.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className="font-bold text-xl">{author?.name}</h2>
+              <Badge variant="category">{category}</Badge>
+            </div>
           </div>
+          <Button variant="outline" size="sm">
+            <Flag className="mr-2 h-4 w-4" />
+            Report
+          </Button>
         </div>
-      </CardHeader>
-      <CardContent className="p-4">
-        <h1 className="mb-4 font-bold text-2xl">{post.title}</h1>
-        {post?.images && post.images.length > 0 && (
-          <div className="mb-4 flex space-x-2 overflow-x-auto">
-            {post.images?.map((image, index) => (
-              <div key={image.url} className="relative h-64 w-64 flex-shrink-0">
-                <Image
-                  src={image.url || "/placeholder.svg"}
-                  alt={`Imagen ${index + 1}`}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-md"
-                />
-              </div>
-            ))}
+
+        <h1 className="mb-4 font-bold text-3xl">{title}</h1>
+        <p className="mb-6 text-gray-700">{content}</p>
+
+        {images && images.length > 0 && (
+          <div className="mb-6">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {images.slice(0, 9).map((image, index) => (
+                <div key={image.id} className="relative aspect-square">
+                  <Image
+                    src={image.url || "/placeholder.svg"}
+                    alt={`Post image ${index + 1}`}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg"
+                  />
+                </div>
+              ))}
+              {images.length > 9 && (
+                <div className="relative flex aspect-square items-center justify-center rounded-lg bg-gray-200">
+                  <span className="font-bold text-2xl text-gray-600">
+                    +{images.length - 9}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         )}
-        <p className="text-muted-foreground">{post.content}</p>
-      </CardContent>
-      <CardFooter className="flex flex-col space-y-4 p-4">
-        <div className="flex w-full items-center justify-between">
-          <span className="font-medium text-sm">{post.category}</span>
-          <ReportDialog postId={post.id} />
+
+        <div className="mb-6 flex space-x-4">
+          {reactions?.map((reaction) => (
+            <ReactionButton
+              key={reaction.id}
+              type={reaction.type}
+              count={reaction.post?.reactionCount || 0}
+            />
+          ))}
         </div>
-        <Comments postId={post.id} comments={post.comments} />
-      </CardFooter>
-    </Card>
+
+        <div className="border-t pt-6">
+          <h3 className="mb-4 font-bold text-xl">Comments</h3>
+          {comments?.map((comment) => (
+            <div key={comment.id} className="mb-4">
+              <div className="mb-2 flex items-center space-x-2">
+                <Avatar>
+                  <AvatarImage
+                    src={comment.author.imageUrl || ""}
+                    alt={comment.author.name || ""}
+                  />
+                  <AvatarFallback>
+                    {comment?.author?.name?.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h4 className="font-semibold">{comment.author.name}</h4>
+                  <span className="text-gray-500 text-sm">
+                    {comment.createdAt.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+              <p className="ml-10 text-gray-700">{comment.content}</p>
+              <div className="mt-2 ml-10 flex space-x-2">
+                {comment?.reactions?.map((reaction) => (
+                  <ReactionButton
+                    key={reaction.id}
+                    type={reaction.type}
+                    count={reaction.comment?.reactionCount || 0}
+                    commentId={comment.id}
+                    isComment
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default PostDetail;

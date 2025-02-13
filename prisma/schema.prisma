@@ -23,11 +23,10 @@ model User {
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  isAnonymous Boolean @default(false)
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isAnonymous Boolean  @default(false)
   title       String
   content     String
   category    String
@@ -35,9 +34,12 @@ model Post {
   author   User?   @relation(fields: [authorId], references: [id])
   authorId String?
 
-  comments Comment[]
-  reports  Report[]
-  images   Image[]
+  comments  Comment[]
+  reports   Report[]
+  images    Image[]
+  reactions Reaction[]
+
+  reactionCount Int @default(0) // Nuevo campo para contar las reacciones
 
   @@index([authorId])
 }
@@ -59,13 +61,16 @@ model Comment {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  content String
+  content   String
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String
   post     Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId   String
+
+  reactions Reaction[]
+
+  reactionCount Int @default(0) // Nuevo campo para contar las reacciones
 
   @@index([postId])
   @@index([authorId])
@@ -85,4 +90,24 @@ model Report {
 
   @@index([postId])
   @@index([authorId])
+}
+
+model Reaction {
+  id   String       @id @default(cuid())
+  type TypeReaction
+
+  post      Post?    @relation(fields: [postId], references: [id])
+  postId    String?
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String?
+
+  @@index([postId])
+  @@index([commentId])
+}
+
+enum TypeReaction {
+  like
+  love
+  haha
+  angry
 }
