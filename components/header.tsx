@@ -1,30 +1,40 @@
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
-import { NewPostDialog } from "./new-post-dialog";
+import { Search } from "./search";
+import { prisma } from "@/lib/prisma";
 
-export function Header() {
+export async function Header() {
+  const posts = await prisma.post.findMany({
+    orderBy: { createdAt: "desc" },
+    include: {
+      author: true,
+      comments: {
+        include: {
+          author: true,
+        },
+      },
+      images: true,
+    },
+  });
+
   return (
-    <header className="sticky top-0 z-10 bg-white shadow-md">
-      <nav className="container mx-auto px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="font-bold text-gray-800 text-xl">
-            Plataforma Comunitaria
-          </Link>
-          <div className="flex items-center space-x-4">
-            <NewPostDialog>
-              <Button variant="outline" size="sm">
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Publicar
-              </Button>
-            </NewPostDialog>
-            <Link href="/search" className="text-gray-600 hover:text-gray-800">
-              Buscar
+    <header className="flex items-center justify-between bg-white p-4 shadow-md">
+      <Link href="/" className="font-bold text-2xl text-primary">
+        BlogName
+      </Link>
+      <Search posts={posts} />
+      <nav>
+        <ul className="flex space-x-4">
+          <li>
+            <Link href="/about" className="text-primary hover:underline">
+              About
             </Link>
-            <UserButton afterSignOutUrl="/" />
-          </div>
-        </div>
+          </li>
+          <li>
+            <Link href="/contact" className="text-primary hover:underline">
+              Contact
+            </Link>
+          </li>
+        </ul>
       </nav>
     </header>
   );
