@@ -1,11 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import type { PostWithRelations } from "@/types";
-import { Flag } from "lucide-react";
 import Image from "next/image";
 import type React from "react";
 import { ReactionButton } from "./reaction-button";
+import { ReportDialog } from "./report-dialog";
 
 interface PostDetailProps {
   post: PostWithRelations;
@@ -32,10 +31,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
               <Badge variant="category">{category}</Badge>
             </div>
           </div>
-          <Button variant="outline" size="sm">
-            <Flag className="mr-2 h-4 w-4" />
-            Report
-          </Button>
+          <ReportDialog postId={post.id} />
         </div>
 
         <h1 className="mb-4 font-bold text-3xl">{title}</h1>
@@ -65,7 +61,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
           </div>
         )}
 
-        <div className="mb-6 flex space-x-4">
+        <div className="mb-6 flex flex-wrap gap-4">
           {reactions?.map((reaction) => (
             <ReactionButton
               key={reaction.id}
@@ -97,7 +93,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
                 </div>
               </div>
               <p className="ml-10 text-gray-700">{comment.content}</p>
-              <div className="mt-2 ml-10 flex space-x-2">
+              <div className="mt-2 ml-10 flex flex-wrap space-x-2">
                 {comment?.reactions?.map((reaction) => (
                   <ReactionButton
                     key={reaction.id}
