@@ -48,7 +48,3 @@ Este proyecto tiene como objetivo mejorar la experiencia en grupos de Facebook c
 ## Contribuciones:
 
 Si deseas contribuir, por favor abre un _issue_ o crea un _pull request_ con tus mejoras o correcciones.
-
----
-
-¡Gracias por tu interés en el proyecto!
