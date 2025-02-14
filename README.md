@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aplicación para Filtrado y Organización de Preguntas
 
-## Getting Started
+Este proyecto tiene como objetivo mejorar la experiencia en grupos de Facebook como "¿Alguien sabe...?", donde las publicaciones se pierden rápidamente debido a la falta de organización. La aplicación permite filtrar y categorizar las preguntas y respuestas, haciendo que la información sea más fácil de encontrar.
 
-First, run the development server:
+## Tecnologías utilizadas:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js**: Framework de React para la creación de la aplicación.
+- **Prisma**: ORM para gestionar la base de datos de manera eficiente.
+- **Shadcn**: Biblioteca de componentes UI para crear interfaces de usuario elegantes.
+- **PostgreSQL**: Base de datos relacional para almacenar las publicaciones y usuarios.
+- **TailwindCSS**: Framework CSS para un diseño rápido y responsivo.
+- **TypeScript**: Lenguaje de programación para garantizar la calidad y seguridad del código.
+- **Husky & CommitLint**: Herramientas para validar los commits y asegurar consistencia en los mensajes.
+- **Biome**: Herramienta para gestionar reglas de estilo y formateo de código.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Características:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Filtrado avanzado**: Encuentra publicaciones rápidamente mediante categorías y palabras clave.
+- **Interfaz intuitiva**: Navegación fácil y rápida.
+- **Validación de commits**: Con Husky y CommitLint para asegurar un flujo de trabajo consistente.
+- **Organización de preguntas y respuestas**: Las publicaciones no se pierden entre otras irrelevantes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Instalación:
 
-## Learn More
+1. Clona el repositorio:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   git clone https://github.com/tu-usuario/tu-repo.git
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Instala las dependencias:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   pnpm install
+   ```
 
-## Deploy on Vercel
+3. Configura las variables de entorno:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   cp .env.example .env
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Ejecuta el proyecto en modo desarrollo:
+   ```bash
+   pnpm dev
+   ```
+
+## Contribuciones:
+
+Si deseas contribuir, por favor abre un _issue_ o crea un _pull request_ con tus mejoras o correcciones.
+
+---
+
+¡Gracias por tu interés en el proyecto!
