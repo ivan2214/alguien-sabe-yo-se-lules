@@ -36,7 +36,12 @@ jobs:
 
       - name: Ejecutar Commitlint
         run: |
-          npx commitlint --from=HEAD~1 --to=HEAD --verbose
+            if [ $(git rev-list --count HEAD) -gt 1 ]; then
+              npx commitlint --from=HEAD~1 --to=HEAD --verbose
+            else
+              echo "Solo un commit en el historial, omitiendo Commitlint."
+            fi
+        
 
       - name: Verificar errores de linting
         run: |
