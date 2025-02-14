@@ -45,8 +45,13 @@ jobs:
 
       - name: Verificar errores de linting
         run: |
-          if git diff --quiet HEAD^ HEAD; then
-            echo "No se detectaron cambios en el código, omitiendo linting";
-          else
-            pnpm run lint;
-          fi
+              if git log --oneline | wc -l | grep -q '1'; then
+                echo "Solo un commit en el historial, omitiendo linting";
+              else
+                if git diff --quiet HEAD^ HEAD; then
+                  echo "No se detectaron cambios en el código, omitiendo linting";
+                else
+                  pnpm run lint;
+                fi
+              fi
+          
