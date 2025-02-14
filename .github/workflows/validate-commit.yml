@@ -1,0 +1,47 @@
+name: Validar Mensajes de Commit y Calidad del Código
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop  # O cualquier rama en la que quieras aplicar la validación
+  workflow_dispatch:  # Esto permite ejecutar la acción manualmente desde la interfaz de GitHub
+
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verificar el código
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.13.1'
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10.2.0'  # Especifica la versión de pnpm que utilizas
+
+      - name: Instalar dependencias
+        run: |
+          pnpm install
+
+      - name: Ejecutar Biome
+        run: |
+          pnpm run check
+
+      - name: Ejecutar Commitlint
+        run: |
+          npx commitlint --from=HEAD~1 --to=HEAD --verbose
+
+      - name: Verificar errores de linting
+        run: |
+          if git diff --quiet HEAD^ HEAD; then
+            echo "No se detectaron cambios en el código, omitiendo linting";
+          else
+            pnpm run lint;
+          fi
